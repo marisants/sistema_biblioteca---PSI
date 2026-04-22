@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Online</title>
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}">
+    {% block estilo %}
+    {% endblock %}
+
+</head>
+<body>
+    <header>
+        <img src="../img/logo.png" alt="não foi dessa vez">
+        <nav>
+            <a href="#">Início</a>
+            <a href="#">livros</a>
+            <a href="#">login</a>
+            <a href="#"></a>
+        </nav>
+        <div class="pesquisa">
+            <p>Pesquisar</p>
+            <img src="" alt="">
+        </div>
+    </header>
+    {% block cont %}
+    {% endblock %}
+    <footer>
+        <p>© 2026 BibliotecaOnline. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

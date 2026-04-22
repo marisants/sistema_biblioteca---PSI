@@ -1,0 +1,29 @@
+:root{
+    --cor-principal: rgba(246, 168, 64);
+    --cor-branco: rgb(255, 255, 255);
+}
+
+body{
+    padding: 0;
+    margin: 0;
+    height: 1000vh;
+}
+header{
+    background-color: var(--cor-principal);
+    display: flex;
+    justify-content: space-around;
+    height: 80px;
+}
+.pesquisa{
+    background-color: var(--cor-branco);
+    color: gray;
+    border-radius: 5px;
+    display: flex;
+}
+footer{
+    background-color: var(--cor-principal);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
