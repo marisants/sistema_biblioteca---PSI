@@ -14,7 +14,7 @@ O sistema permitirá que usuários autenticados possam acessar funcionalidades e
 
 ## Problema a ser Resolvido
 
-Muitas bibliotecas ainda realizam o controle de livros manualmente ou com sistemas pouco eficientes, dificultando a organização, busca e controle do acervo. Isso pode gerar problemas como:
+Muitas bibliotecas ainda realizam o controle de livros manualmente ou com sistemas pouco eficientes, dificultando a organização, busca e controle do acervo. Isso pode gerar problemas como :
 
 * Dificuldade na busca por livros
 * Falta de organização do acervo
