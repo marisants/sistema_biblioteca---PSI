@@ -16,5 +16,11 @@
         "autor": "Antoine de Saint-Exupéry",
         "ano": "1943",
         "genero": "ficção"
+    },
+    {
+        "titulo": "A seleção",
+        "autor": "uma mulher",
+        "ano": "2008",
+        "genero": "feminino"
     }
 ]

@@ -1,7 +1,10 @@
-from flask import Flask, render_template, url_for, redirect, request
+from flask import Flask, render_template, url_for, redirect, request, session
 import json
 
 app = Flask(__name__)
+app.secret_key = 'segredo'
+
+usuarios = {}
 
 @app.route('/')
 def index():
@@ -40,3 +43,30 @@ def cadastro_livros():
         livros = json.load(f)
 
     return render_template('livros.html', livros=livros) 
+
+@app.route('/cadastro', methods = ['POST', 'GET'])
+def cadastro():
+    if request.method == 'POST':
+        user = request.form.get('usuario')
+        senha = request.form.get('senha')
+
+        usuarios[user] = senha 
+
+        return redirect(url_for('login'))
+    return render_template('cadastro.html')
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = request.form.get('usuario')
+        senha = request.form.get('senha')
+
+        if user in usuarios and usuarios[user] == senha:
+            session[user] = user
+            return redirect(url_for('index'))
+        
+        return redirect(url_for('login'))
+    return render_template('login.html')
+
+if __name__ == '__main__':
+       app.run(debug=True)

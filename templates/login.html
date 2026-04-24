@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block cont %}
+<div class="corpo">
+    <img src="" alt="">
+    <div class="form">
+        <form action="{{url_for('login')}}" method="post">
+            <input type="text" name="usuario" placeholder="Usuario" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+<!-- FALTA O CSS -->

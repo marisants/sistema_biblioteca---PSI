@@ -12,18 +12,17 @@
 </head>
 <body>
     <header>
-        <!-- tem q carregar a imagem assim, q ai n dá problema no caminho dps -->
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo">
+        <div class="ini">
+            <!-- tem q carregar a imagem assim, q ai n dá problema no caminho dps -->
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" height="100" width="100">
+            <input id="pesquisar" type="text" placeholder="Pesquisar">
+        </div>
         <nav>
             <a href="#">Início</a>
             <a href="{{ url_for('cadastro_livros') }}">livros</a>
             <a href="#">login</a>
             <a href="#"></a>
         </nav>
-        <div class="pesquisa">
-            <p>Pesquisar</p>
-            <img src="" alt="">
-        </div>
     </header>
     <div class="container">
         {% block cont %}
