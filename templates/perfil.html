@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block cont %}
+
+    <h1>tela de perfil</h1>
+
+    <p>Usuário: {{ usuario }}</p>
+    <p>Senha: {{ senha }}</p>
+
+    <a href="{{ url_for('logout') }}">Sair</a>
+
+{% endblock %}
+
+<!-- FALTA O CSS -->

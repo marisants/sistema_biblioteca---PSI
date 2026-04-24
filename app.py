@@ -62,11 +62,25 @@ def login():
         senha = request.form.get('senha')
 
         if user in usuarios and usuarios[user] == senha:
-            session[user] = user
+            session['usuario'] = user
             return redirect(url_for('index'))
         
         return redirect(url_for('login'))
     return render_template('login.html')
+
+@app.route('/perfil')
+def perfil():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    user = session['usuario']
+    senhaf ="*" * len(usuarios[user])
+    return render_template('perfil.html' , usuario=user , senha=senhaf)
+
+@app.route('/logout')
+def logout():
+    session.pop('usuario', None)
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
        app.run(debug=True)
