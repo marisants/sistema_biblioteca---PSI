@@ -3,10 +3,12 @@
     --cor-branco: rgb(255, 255, 255);
 }
 
-body{
+html,body{
+    display: flex;
+    flex-direction: column;
     padding: 0;
     margin: 0;
-    height: 1000vh;
+    height: 100vh;
 }
 header{
     background-color: var(--cor-principal);
@@ -26,4 +28,8 @@ footer{
     justify-content: center;
     align-items: center;
     height: 50px;
+    flex-shrink: 0;
+}
+.container{
+    flex: 1 0 auto;
 }
