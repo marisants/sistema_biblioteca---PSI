@@ -1,6 +1,6 @@
 :root{
-    --cor-principal: rgba(246, 168, 64);
-    --cor-principal-hover: rgb(201, 137, 53);
+    --cor-principal: rgb(105, 169, 228);
+    --cor-principal-hover: rgb(97, 155, 209);
     --cor-branco: rgb(255, 255, 255);
 }
 
@@ -15,32 +15,27 @@ header{
     background-color: var(--cor-principal);
     display: flex;
     flex-direction: column;
-    /* height: 80px; */
+    justify-content: center;
 }
 .ini{
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 input{
-    /* background-color: var(--cor-branco);
-    color: gray;
-    border-radius: 5px;
-    display: flex;
-    padding: 2px 120px 2px 20px;
-    width: 8%; */
-    background-color: var(--cor-principal);
-    border-radius: 15px;
-    color: var(--cor-branco);
-    /* padding: 2px 120px 2px 20px; */
+    height: 25px;
+    border-radius: 20px;
+    padding: 5px;
 }
 nav{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-left: 10px;
+    align-items: center;
     gap: 70px;
-    padding-top: 20px;
-    color: var(--cor-menu-nav-texto);
+    color: var(--cor-menu-nav-texto); 
+    width: 50%;
+    height: 30px;
 }
 footer{
     background-color: var(--cor-principal);

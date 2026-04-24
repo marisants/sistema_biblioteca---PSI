@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Online</title>
-
+    
     <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}">
     {% block estilo %}
     {% endblock %}
@@ -14,16 +14,18 @@
     <header>
         <div class="ini">
             <!-- tem q carregar a imagem assim, q ai n dá problema no caminho dps -->
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" height="100" width="100">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" height="105" width="190">
             <input id="pesquisar" type="text" placeholder="Pesquisar">
         </div>
-        <nav>
-            <a href="#">Início</a>
-            <a href="{{ url_for('cadastro_livros') }}">livros</a>
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('perfil') }}">Perfil</a>
-            <a href="#"></a>
-        </nav>
+        <div class="nav">
+            <nav>
+                <a href="#">Início</a>
+                <a href="{{ url_for('cadastro_livros') }}">livros</a>
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('perfil') }}">Perfil</a>
+                <a href="#"></a>
+            </nav>
+        </div>
     </header>
     <div class="container">
         {% block cont %}
