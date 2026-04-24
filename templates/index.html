@@ -3,9 +3,12 @@
 
 
 {% block cont %}
-<img src="{{ url_for('static', filename='img/inicio.png') }}" alt="logo">
-<p>oiii.</p>
-<a href="{{url_for('cadastro')}}">
-    <button>Cadastre-se</button>
-</a>
+<div class="texto">
+    <h1>Bem-Vindo à Biblioteca Online!</h1>
+    <p>Um lugar pra você descobrir, explorar e se apaixonar por historias incríveis!</p>
+    <a href="{{url_for('cadastro')}}">
+        <button>Cadastre-se</button>
+    </a>
+</div>
+<img src="{{ url_for('static', filename='img/inicio.png') }}" alt="logo" height="500" >
 {% endblock %}

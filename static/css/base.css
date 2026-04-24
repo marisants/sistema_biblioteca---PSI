@@ -1,5 +1,6 @@
 :root{
     --cor-principal: rgba(246, 168, 64);
+    --cor-principal-hover: rgb(201, 137, 53);
     --cor-branco: rgb(255, 255, 255);
 }
 
@@ -30,9 +31,7 @@ input{
     background-color: var(--cor-principal);
     border-radius: 15px;
     color: var(--cor-branco);
-    padding: 2px 120px 2px 20px;
-    margin-top: 10px;
-    margin-right: 40px;
+    /* padding: 2px 120px 2px 20px; */
 }
 nav{
     display: flex;
@@ -53,4 +52,17 @@ footer{
 }
 .container{
     flex: 1 0 auto;
+    padding: 60px 15% 0px 15%;
+    display: flex;
+    justify-content: space-between;
+}
+button{
+    padding: 15px;
+    background-color: var(--cor-principal);
+    border: none;
+    border-radius: 15px;
+    font-size: 20px;
+}
+button:hover{
+    background-color: var(--cor-principal-hover);
 }
