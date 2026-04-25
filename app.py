@@ -17,6 +17,9 @@ def cadastrar():
 @app.route('/cadastrar_livro', methods=['GET', 'POST'])
 def cadastro_livros():
 
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         titulo = request.form['titulo']
         autor = request.form['autor']
@@ -26,6 +29,12 @@ def cadastro_livros():
         # lê o arquivo json
         with open('livros.json', 'r', encoding='utf-8') as f:
             livros = json.load(f)
+
+        #só pra n poder cadastrar o msm livro duas vezes
+        #só funciona se escrever EXATAMENTE igual
+        for livro in livros:
+            if livro['titulo'] == titulo and livro['autor'] == autor:
+                return redirect(url_for('cadastro_livros'))
 
         livros.append({
             'titulo': titulo,
@@ -42,7 +51,45 @@ def cadastro_livros():
     with open('livros.json', 'r', encoding='utf-8') as f:
         livros = json.load(f)
 
-    return render_template('livros.html', livros=livros) 
+    return render_template('livros.html', livros=livros)
+
+@app.route('/excluir_livro/<int:id>')
+def excluir (id):
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    # lê o arquivo json
+    with open('livros.json', 'r', encoding='utf-8') as f:
+            livros = json.load(f)
+
+    #exclui pelo índice
+    if 0 <= id < len(livros):
+        livros.pop(id)
+
+    with open('livros.json', 'w', encoding='utf-8') as f:
+        json.dump(livros, f, indent=4, ensure_ascii=False)
+
+    return redirect(url_for('cadastro_livros'))   
+
+@app.route('/editar_livro/<int:id>', methods=['POST'])
+def editar(id):
+
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    with open('livros.json', 'r', encoding='utf-8') as f:
+        livros = json.load(f)
+
+    if 0 <= id < len(livros):
+        livros[id]['titulo'] = request.form['titulo']
+        livros[id]['autor'] = request.form['autor']
+        livros[id]['ano'] = request.form['ano']
+        livros[id]['genero'] = request.form['genero']
+
+    with open('livros.json', 'w', encoding='utf-8') as f:
+        json.dump(livros, f, indent=4, ensure_ascii=False)
+
+    return redirect(url_for('cadastro_livros')) 
 
 @app.route('/cadastro', methods = ['POST', 'GET'])
 def cadastro():
@@ -65,7 +112,6 @@ def login():
             session['usuario'] = user
             return redirect(url_for('index'))
         
-        return redirect(url_for('login'))
     return render_template('login.html')
 
 @app.route('/perfil')

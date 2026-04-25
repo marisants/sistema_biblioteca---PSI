@@ -2,19 +2,7 @@
     {
         "titulo": "O Pequeno Príncipe",
         "autor": "Antoine de Saint-Exupéry",
-        "ano": "1943",
-        "genero": "ficção"
-    },
-    {
-        "titulo": "O Pequeno Príncipe",
-        "autor": "Antoine de Saint-Exupéry",
-        "ano": "1943",
-        "genero": "ficção"
-    },
-    {
-        "titulo": "O Pequeno Príncipe",
-        "autor": "Antoine de Saint-Exupéry",
-        "ano": "1943",
+        "ano": "1935",
         "genero": "ficção"
     },
     {
@@ -22,5 +10,11 @@
         "autor": "uma mulher",
         "ano": "2008",
         "genero": "feminino"
+    },
+    {
+        "titulo": "aiaai",
+        "autor": "bbb",
+        "ano": "8",
+        "genero": "qnwn"
     }
 ]

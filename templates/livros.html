@@ -2,7 +2,7 @@
 
 {% block cont %}
 <img src="{{ url_for('static', filename='img/inicio.png') }}" alt="logo">
-    <form method="POST" action="/cadastrar_livro">
+    <form method="POST" action="{{ url_for('cadastro_livros') }}">
         
         <label for="titulo">Título:</label><br>
         <input type="text" id="titulo" name="titulo" required><br><br>
@@ -24,7 +24,19 @@
     <ul>
         {% for livro in livros %}
             <li>
-                {{ livro.titulo }} - {{ livro.autor }} ({{ livro.ano }})
+                <form method="POST" action="{{ url_for('editar', id=loop.index0) }}">
+
+                    <input type="text" name="titulo" value="{{ livro.titulo }}">
+                    <input type="text" name="autor" value="{{ livro.autor }}">
+                    <input type="number" name="ano" value="{{ livro.ano }}">
+                    <input type="text" name="genero" value="{{ livro.genero }}">
+
+                    <button type="submit">Salvar</button>
+                </form>
+
+                <a href="{{ url_for('excluir', id=loop.index0) }}">
+                    Remover
+                </a>
             </li>
         {% endfor %}
     </ul>
