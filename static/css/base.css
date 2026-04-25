@@ -22,10 +22,11 @@ header{
     justify-content: space-around;
     align-items: center;
 }
-input{
+#pesquisar{
     height: 25px;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 5px;
+    border: none;
 }
 nav{
     display: flex;
@@ -57,7 +58,32 @@ button{
     border: none;
     border-radius: 15px;
     font-size: 20px;
+    box-shadow: 2px 2px 5px gray;
 }
 button:hover{
     background-color: var(--cor-principal-hover);
+    transform: scale(1.1);
+}
+a{
+    text-decoration: none;
+}
+
+/* Formularios */
+.corpo{
+    padding: 20px;
+    box-shadow: 2px 2px 5px gray;
+    border-radius: 20px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+form button{
+    padding: 10px;
+}
+input{
+    height: 25px;
+    border-radius: 10px;
+    padding: 5px;
 }

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block cont %}
+<div class="corpo">
 
     <h1>tela de perfil</h1>
 
@@ -8,6 +9,7 @@
     <p>Senha: {{ senha }}</p>
 
     <a href="{{ url_for('logout') }}">Sair</a>
+</div>
 
 {% endblock %}
 
