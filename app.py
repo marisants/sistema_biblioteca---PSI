@@ -6,8 +6,6 @@ app.secret_key = 'segredo'
 
 usuarios = {}
 
-# test
-
 @app.route('/')
 def index():
     return render_template('index.html')
