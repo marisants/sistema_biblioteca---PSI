@@ -1,24 +1,45 @@
-from flask import Flask, render_template, url_for, redirect, request, session
+from flask import Flask, render_template, url_for, redirect, request, session, flash
 import json
 
 app = Flask(__name__)
 app.secret_key = 'segredo'
+#p diferenciar usuários comuns de admins e separar oq cada um pd fazer 
+cod_admin = '2024.1'
 
-usuarios = {}
 
 @app.route('/')
 def index():
     return render_template('index.html')
 @app.route('/livros')
-def cadastrar():
+def listar_livros():
     #por enquanto tá funcionando só p admin, ai qunado tiver o p gnt normal, tem q colocar um condicional aq 
-    return redirect (url_for('cadastro_livros'))
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    with open('livros.json', 'r', encoding='utf-8') as f:
+        livros = json.load(f)
+
+    # o bixo d string de consulta q ele pediu
+    titulo = request.args.get('titulo')
+    genero = request.args.get('genero')
+
+    if titulo:
+        livros = [l for l in livros if titulo.lower() in l['titulo'].lower()]
+
+    if genero:
+        livros = [l for l in livros if genero.lower() in l['genero'].lower()]
+
+    return render_template('livros.html', livros=livros)
 
 @app.route('/cadastrar_livro', methods=['GET', 'POST'])
 def cadastro_livros():
 
     if 'usuario' not in session:
         return redirect(url_for('login'))
+    
+    if session.get('tipo') != 'admin':
+        flash('Apenas administradores podem cadastrar livros')
+        return redirect(url_for('listar_livros'))
 
     if request.method == 'POST':
         titulo = request.form['titulo']
@@ -31,9 +52,10 @@ def cadastro_livros():
             livros = json.load(f)
 
         #só pra n poder cadastrar o msm livro duas vezes
-        #só funciona se escrever EXATAMENTE igual
+        #funciona se estiver escrito igual (n é sensível a letras maiúsculas, ent se a diferença for essa tb n vai deixar cadastrar)
         for livro in livros:
-            if livro['titulo'] == titulo and livro['autor'] == autor:
+            if livro['titulo'].lower() == titulo.lower() and livro['autor'].lower() == autor.lower():
+                flash('Livro já cadastrado')
                 return redirect(url_for('cadastro_livros'))
 
         livros.append({
@@ -47,16 +69,18 @@ def cadastro_livros():
         with open('livros.json', 'w', encoding='utf-8') as f:
             json.dump(livros, f, indent=4, ensure_ascii=False)
 
-    # lê o arquivo json p poder mostrar os cadastrados
-    with open('livros.json', 'r', encoding='utf-8') as f:
-        livros = json.load(f)
+        return redirect(url_for('listar_livros'))
 
-    return render_template('livros.html', livros=livros)
+    return render_template('cadastro_livro.html')
 
 @app.route('/excluir_livro/<int:id>')
 def excluir (id):
     if 'usuario' not in session:
         return redirect(url_for('login'))
+    
+    if session.get('tipo') != 'admin':
+        flash('Apenas administradores podem remover livros')
+        return redirect(url_for('listar_livros'))
     
     # lê o arquivo json
     with open('livros.json', 'r', encoding='utf-8') as f:
@@ -69,13 +93,17 @@ def excluir (id):
     with open('livros.json', 'w', encoding='utf-8') as f:
         json.dump(livros, f, indent=4, ensure_ascii=False)
 
-    return redirect(url_for('cadastro_livros'))   
+    return redirect(url_for('listar_livros'))   
 
 @app.route('/editar_livro/<int:id>', methods=['POST'])
 def editar(id):
 
     if 'usuario' not in session:
         return redirect(url_for('login'))
+    
+    if session.get('tipo') != 'admin':
+        flash('Apenas administradores podem editar livros')
+        return redirect(url_for('listar_livros'))
 
     with open('livros.json', 'r', encoding='utf-8') as f:
         livros = json.load(f)
@@ -89,15 +117,37 @@ def editar(id):
     with open('livros.json', 'w', encoding='utf-8') as f:
         json.dump(livros, f, indent=4, ensure_ascii=False)
 
-    return redirect(url_for('cadastro_livros')) 
+    return redirect(url_for('listar_livros')) 
 
 @app.route('/cadastro', methods = ['POST', 'GET'])
 def cadastro():
     if request.method == 'POST':
         user = request.form.get('usuario')
         senha = request.form.get('senha')
+        codigo = request.form.get('codigo_admin')
+        
+        if codigo == cod_admin:
+            tipo = 'admin'
+        else:
+            tipo = 'comum'
+            
+        with open('usuarios.json', 'r', encoding='utf-8') as f:
+            usuarios = json.load(f)
+            
+        for u in usuarios:
+            if u['usuario'] == user:
+                flash('Usuário já existe')
+                return redirect(url_for('cadastro'))
+        
+        usuarios.append({
+            'usuario': user,
+            'senha': senha,
+            'tipo': tipo
+        })
+        
+        with open('usuarios.json', 'w', encoding='utf-8') as f:
+            json.dump(usuarios, f, indent=4, ensure_ascii=False)
 
-        usuarios[user] = senha 
 
         return redirect(url_for('login'))
     return render_template('cadastro.html')
@@ -107,10 +157,17 @@ def login():
     if request.method == 'POST':
         user = request.form.get('usuario')
         senha = request.form.get('senha')
+        
+        with open('usuarios.json', 'r', encoding='utf-8') as f:
+            usuarios = json.load(f)
 
-        if user in usuarios and usuarios[user] == senha:
-            session['usuario'] = user
-            return redirect(url_for('index'))
+        for u in usuarios:
+            if u['usuario'] == user and u['senha'] == senha:
+                session['usuario'] = user
+                session['tipo'] = u['tipo']
+                return redirect(url_for('listar_livros'))
+        flash('usuário ou senha inválidos')
+        return redirect(url_for('login'))
         
     return render_template('login.html')
 
@@ -120,8 +177,18 @@ def perfil():
         return redirect(url_for('login'))
 
     user = session['usuario']
-    senhaf ="*" * len(usuarios[user])
-    return render_template('perfil.html' , usuario=user , senha=senhaf)
+    
+    with open('usuarios.json', 'r', encoding='utf-8') as f:
+        usuarios = json.load(f)
+        
+    for u in usuarios:
+        if u['usuario'] == user:
+            senha = u['senha']
+            tipo = u['tipo']
+            break
+    
+    senhaf ="*" * len(senha)
+    return render_template('perfil.html' , usuario=user , senha=senhaf, tipo=tipo)
 
 @app.route('/logout')
 def logout():

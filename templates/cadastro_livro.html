@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block cont %}
+
+<img src="{{ url_for('static', filename='img/inicio.png') }}" alt="logo">
+
+<h2>Cadastrar Livro</h2>
+
+<form method="POST" action="{{ url_for('cadastro_livros') }}">
+        
+    <label for="titulo">Título:</label><br>
+    <input type="text" id="titulo" name="titulo" required><br><br>
+
+    <label for="autor">Autor:</label><br>
+    <input type="text" id="autor" name="autor" required><br><br>
+
+    <label for="ano">Ano de Publicação:</label><br>
+    <input type="number" id="ano" name="ano"><br><br>
+
+    <label for="genero">Gênero:</label><br>
+    <input type="text" id="genero" name="genero"><br><br>
+
+    <button type="submit">Cadastrar</button>
+</form>
+
+<br>
+
+<a href="{{ url_for('listar_livros') }}">Ver livros cadastrados</a>
+
+{% endblock %}
+
+{% block estilo %}
+<style>
+form{
+  margin-top: 50px;
+  margin-left: 50px;
+}
+</style>
+{% endblock %}

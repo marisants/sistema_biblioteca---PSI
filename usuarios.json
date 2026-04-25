@@ -1,0 +1,17 @@
+[
+    {
+        "usuario": "mary",
+        "senha": "1209",
+        "tipo": "comum"
+    },
+    {
+        "usuario": "Mariana",
+        "senha": "1209",
+        "tipo": "comum"
+    },
+    {
+        "usuario": "Pedro",
+        "senha": "1507",
+        "tipo": "admin"
+    }
+]

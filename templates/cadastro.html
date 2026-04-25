@@ -7,6 +7,7 @@
         <form action="{{url_for('cadastro')}}" method="post">
             <input type="text" name="usuario" placeholder="Usuario" required>
             <input type="password" name="senha" placeholder="Senha" required>
+            <input type="text" name="codigo_admin" placeholder="código de administrador" id="codigo_admin"><br><br>
             <button type="submit">Cadastrar</button>
         </form>
         <p>Já possui conta? <a href="{{url_for('login')}}">Entrar</a></p>
