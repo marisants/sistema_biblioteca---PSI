@@ -38,7 +38,6 @@ O desenvolvimento de um sistema web para biblioteca torna o gerenciamento mais e
 * informar Autor
 * informar Ano
 * informar Gênero
-* informar Editora
 
 ## Tecnologias Utilizadas
 
@@ -47,6 +46,7 @@ O desenvolvimento de um sistema web para biblioteca torna o gerenciamento mais e
 * HTML
 * CSS
 * Jinja2 (templates)
+* JSON
 
 ## Conclusão
 
