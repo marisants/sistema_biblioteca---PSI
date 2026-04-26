@@ -2,12 +2,13 @@
 
 {% block cont %}
 <div class="corpo">
-    <img src="" alt="">
+    <img src="{{url_for('static', filename = 'img/cadastro.png')}}" alt="" height="400px" width="400px">
     <div class="form">
+        <h1>Cadastro</h1>
         <form action="{{url_for('cadastro')}}" method="post">
             <input type="text" name="usuario" placeholder="Usuario" required>
             <input type="password" name="senha" placeholder="Senha" required>
-            <input type="text" name="codigo_admin" placeholder="código de administrador" id="codigo_admin"><br><br>
+            <input type="text" name="codigo_admin" placeholder="código de administrador" id="codigo_admin">
             <button type="submit">Cadastrar</button>
         </form>
         <p>Já possui conta? <a href="{{url_for('login')}}">Entrar</a></p>
@@ -15,4 +16,19 @@
 </div>
 {% endblock %}
 
-<!-- FALTA O CSS -->
+{% block estilo %}
+<style>
+    :root{
+        --cor-principal: rgb(105, 169, 228);
+        --cor-principal-hover: rgb(97, 155, 209);
+        --cor-branco: rgb(255, 255, 255);
+    }
+    h1{
+        color: var(--cor-principal);
+    }
+    p{
+        border-top: 1px solid var(--cor-principal-hover);
+        padding-top: 5px;
+    }
+</style>
+{% endblock %}

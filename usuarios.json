@@ -13,5 +13,10 @@
         "usuario": "Pedro",
         "senha": "1507",
         "tipo": "admin"
+    },
+    {
+        "usuario": "arthur",
+        "senha": "2010",
+        "tipo": "comum"
     }
 ]

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 
-
 {% block cont %}
 <div class="texto">
     <h1>Bem-Vindo à Biblioteca Online!</h1>
@@ -11,4 +10,20 @@
     </a>
 </div>
 <img src="{{ url_for('static', filename='img/inicio.png') }}" alt="logo" height="500" >
+{% endblock %}
+
+{% block estilo %}
+<style>
+    h1{
+        font-size: 45px;
+        color: black;
+    }
+    .texto p{
+        font-size: 20px;
+    }
+    .container{
+        flex-direction: row;
+        justify-content: center;
+    }
+</style>
 {% endblock %}

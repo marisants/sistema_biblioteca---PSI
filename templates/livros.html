@@ -2,42 +2,39 @@
 
 {% block cont %}
 
-<img src="{{ url_for('static', filename='img/inicio.png') }}" alt="logo">
+<!-- <img src="{{ url_for('static', filename='img/inicio.png') }}" alt="logo"> -->
+<div class="corpo">
+    <h2>Buscar livros</h2>
 
-<h2>Buscar livros</h2>
+    <form method="GET" action="{{ url_for('listar_livros') }}" class="busca">
+        <input type="text" name="titulo" placeholder="Buscar por título">
+        <input type="text" name="genero" placeholder="Buscar por gênero">
+        <button type="submit">Buscar</button>
+    </form>
+    
+    <div class="livros">
+        <h3>Livros disponiveis</h3>
+        <ul>
+            {% for livro in livros %}
+                <li>
+                    <form method="POST" action="{{ url_for('editar', id=loop.index0) }}">
 
-<form method="GET" action="{{ url_for('listar_livros') }}">
-    <input type="text" name="titulo" placeholder="Buscar por título">
-    <input type="text" name="genero" placeholder="Buscar por gênero">
-    <button type="submit">Buscar</button>
-</form>
+                        <input type="text" name="titulo" value="{{ livro.titulo }}">
+                        <input type="text" name="autor" value="{{ livro.autor }}">
+                        <input type="number" name="ano" value="{{ livro.ano }}">
+                        <input type="text" name="genero" value="{{ livro.genero }}">
 
-<br>
-
-<a href="{{ url_for('cadastro_livros') }}">Cadastrar novo livro</a>
-
-<h3>Livros cadastrados:</h3>
-
-<ul>
-    {% for livro in livros %}
-        <li>
-            <form method="POST" action="{{ url_for('editar', id=loop.index0) }}">
-
-                <input type="text" name="titulo" value="{{ livro.titulo }}">
-                <input type="text" name="autor" value="{{ livro.autor }}">
-                <input type="number" name="ano" value="{{ livro.ano }}">
-                <input type="text" name="genero" value="{{ livro.genero }}">
-
-                <button type="submit">Salvar</button>
-            </form>
-
-            <a href="{{ url_for('excluir', id=loop.index0) }}">
-                Remover
-            </a>
-        </li>
-    {% endfor %}
-</ul>
-
+                        <button type="submit">Salvar</button>
+                    </form>
+                    <a href="{{ url_for('excluir', id=loop.index0) }}">
+                        <button id="del">Remover</button>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <a href="{{ url_for('cadastro_livros') }}" class="a">Cadastrar novo livro</a>
+</div>
 {% endblock %}
 
 {% block estilo %}
@@ -45,10 +42,66 @@
 .container{
   display: flex;
 }
-
+.corpo{
+    width: 90%;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+}
 form{
-  margin-top: 20px;
-  margin-left: 20px;
+    gap: 10px;
+}
+.livros{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+h3, h2{
+    width: 100%;
+    background-color: rgb(173, 207, 238);
+    border-bottom: 5px solid rgb(97, 155, 209);
+    padding: 10px;
+    text-align: center;
+}
+ul{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+li{
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 2px gray;
+    padding: 10px;
+    border-radius: 10px;
+    width: 20%;
+}
+button{
+    width: 50%;
+    font-size: 15px;
+}
+#del{
+    background-color: rgb(245, 109, 109);
+    margin-top: 10px;
+}
+.flash{
+    width: 100%;
+}
+.busca{
+    flex-direction: row;
+}
+.busca input, .busca button{
+    width: 30%;
+    padding: 10px;
+}
+.busca button:hover{
+    transform: none;
+}
+.a{
+    margin-top: 10px;
 }
 </style>
 {% endblock %}

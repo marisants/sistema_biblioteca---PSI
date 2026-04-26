@@ -10,6 +10,7 @@ cod_admin = '2024.1'
 @app.route('/')
 def index():
     return render_template('index.html')
+
 @app.route('/livros')
 def listar_livros():
     #por enquanto tá funcionando só p admin, ai qunado tiver o p gnt normal, tem q colocar um condicional aq 
@@ -121,6 +122,10 @@ def editar(id):
 
 @app.route('/cadastro', methods = ['POST', 'GET'])
 def cadastro():
+    if 'usuario' in session:
+        flash('Usuario Cadastrado')
+        return redirect(url_for('perfil'))
+
     if request.method == 'POST':
         user = request.form.get('usuario')
         senha = request.form.get('senha')
@@ -154,6 +159,7 @@ def cadastro():
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
+    
     if request.method == 'POST':
         user = request.form.get('usuario')
         senha = request.form.get('senha')
@@ -168,7 +174,11 @@ def login():
                 return redirect(url_for('listar_livros'))
         flash('usuário ou senha inválidos')
         return redirect(url_for('login'))
-        
+    
+    if 'usuario' in session:  
+        flash('Usuario já está logado!')  
+        return redirect(url_for('perfil'))
+    
     return render_template('login.html')
 
 @app.route('/perfil')
@@ -193,7 +203,7 @@ def perfil():
 @app.route('/logout')
 def logout():
     session.pop('usuario', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
        app.run(debug=True)

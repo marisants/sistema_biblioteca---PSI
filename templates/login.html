@@ -2,8 +2,9 @@
 
 {% block cont %}
 <div class="corpo">
-    <img src="" alt="">
+    <img src="{{url_for('static', filename = 'img/login.png')}}" alt="" height="350px" width="400px">
     <div class="form">
+        <h1>Login</h1>
         <form action="{{url_for('login')}}" method="post">
             <input type="text" name="usuario" placeholder="Usuario" required>
             <input type="password" name="senha" placeholder="Senha" required>

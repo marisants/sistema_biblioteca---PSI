@@ -22,17 +22,18 @@ header{
     justify-content: space-around;
     align-items: center;
 }
-input{
+#pesquisar{
     height: 25px;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 5px;
+    border: none;
 }
 nav{
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 70px;
+    gap: 20px;
     color: var(--cor-menu-nav-texto); 
     width: 50%;
     height: 30px;
@@ -44,12 +45,14 @@ footer{
     align-items: center;
     height: 50px;
     flex-shrink: 0;
+    margin-top: 30px;
 }
 .container{
     flex: 1 0 auto;
     padding: 60px 15% 0px 15%;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
 }
 button{
     padding: 15px;
@@ -57,7 +60,49 @@ button{
     border: none;
     border-radius: 15px;
     font-size: 20px;
+    color: white;
+    box-shadow: 2px 2px 5px gray;
 }
 button:hover{
     background-color: var(--cor-principal-hover);
+    transform: scale(1.1);
+}
+a{
+    text-decoration: none;
+}
+.corpo{
+    max-width: 90%;
+    padding: 30px;
+    box-shadow: 0px 0px 5px gray;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: row;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.form{
+    border-left: 1px solid var(--cor-principal-hover);
+    padding-left: 10px;
+    width: 50%;
+}
+form input{
+    height: 25px;
+    border-radius: 10px;
+    padding: 5px;
+    width: 95%;
+}
+h1{
+    color: var(--cor-principal);
+}
+.flash {
+    max-width: 90%;
+    padding: 10px;
+    box-shadow: 0px 0px 5px gray;
+    border-radius: 25px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
 }
