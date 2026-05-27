@@ -1,10 +1,13 @@
 from flask import Flask, render_template, url_for, redirect, request, session, flash
+from .db import criar_conexao, inicializar_banco
 import json
 
 app = Flask(__name__)
 app.secret_key = 'segredo'
 #p diferenciar usuários comuns de admins e separar oq cada um pd fazer 
 cod_admin = '2024.1'
+
+inicializar_banco()
 
 
 @app.route('/')
@@ -135,49 +138,49 @@ def cadastro():
             tipo = 'admin'
         else:
             tipo = 'comum'
-            
-        with open('usuarios.json', 'r', encoding='utf-8') as f:
-            usuarios = json.load(f)
-            
-        for u in usuarios:
-            if u['usuario'] == user:
-                flash('Usuário já existe')
-                return redirect(url_for('cadastro'))
-        
-        usuarios.append({
-            'usuario': user,
-            'senha': senha,
-            'tipo': tipo
-        })
-        
-        with open('usuarios.json', 'w', encoding='utf-8') as f:
-            json.dump(usuarios, f, indent=4, ensure_ascii=False)
 
+        conexao = criar_conexao()
+        cursor = conexao.cursor()
 
-        return redirect(url_for('login'))
+        resultado = cursor.execute("SELECT * FROM usuario WHERE nome == ?", (user, ))
+        usuario = resultado.fetchone()
+
+        if not usuario:
+            cursor.execute("INSERT INTO usuario(nome, senha, tipo) VALUES(?, ?, ?)", (user, senha, tipo))
+            conexao.commit()
+            conexao.close()
+
+            return(redirect(url_for("login")))
+        else:
+            flash('Usuário já existe')
+            return(redirect(url_for("cadastro")))
+        
     return render_template('cadastro.html')
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-    
-    if request.method == 'POST':
-        user = request.form.get('usuario')
-        senha = request.form.get('senha')
-        
-        with open('usuarios.json', 'r', encoding='utf-8') as f:
-            usuarios = json.load(f)
-
-        for u in usuarios:
-            if u['usuario'] == user and u['senha'] == senha:
-                session['usuario'] = user
-                session['tipo'] = u['tipo']
-                return redirect(url_for('listar_livros'))
-        flash('usuário ou senha inválidos')
-        return redirect(url_for('login'))
-    
     if 'usuario' in session:  
         flash('Usuario já está logado!')  
         return redirect(url_for('perfil'))
+    
+    if request.method == 'POST':
+        nome = request.form.get('usuario')
+        senha = request.form.get('senha')
+
+        conexao = criar_conexao()
+        cursor = conexao.cursor()
+
+        resultado = cursor.execute("SELECT * FROM usuario WHERE nome == ?", (nome, ))
+        user = resultado.fetchone()
+
+        if user and user["senha"] == senha:
+            session['usuario'] = user["nome"]
+            session['id'] = user['id']
+            session['tipo'] = user['tipo']
+            return redirect(url_for('listar_livros'))
+        else:
+            flash('usuário ou senha inválidos')
+            return redirect(url_for('login'))           
     
     return render_template('login.html')
 
@@ -186,19 +189,17 @@ def perfil():
     if 'usuario' not in session:
         return redirect(url_for('login'))
 
-    user = session['usuario']
+    userid = session['id']
     
-    with open('usuarios.json', 'r', encoding='utf-8') as f:
-        usuarios = json.load(f)
-        
-    for u in usuarios:
-        if u['usuario'] == user:
-            senha = u['senha']
-            tipo = u['tipo']
-            break
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
+
+    resultado = cursor.execute('SELECT * FROM usuario WHERE id = ?', (userid, ))
+    user = resultado.fetchone()
+    senha = user["senha"]
     
     senhaf ="*" * len(senha)
-    return render_template('perfil.html' , usuario=user , senha=senhaf, tipo=tipo)
+    return render_template('perfil.html' , usuario=user['nome'] , senha=senhaf, tipo=user["tipo"])
 
 @app.route('/logout')
 def logout():
