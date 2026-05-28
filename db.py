@@ -18,5 +18,15 @@ def inicializar_banco():
         )
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS livros(
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            titulo TEXT NOT NULL,
+            autor TEXT NOT NULL, 
+            ano INTEGER NOT NULL,
+            genero TEXT NOT NULL
+        )
+    """)
+
     conexao.commit()
     conexao.close()

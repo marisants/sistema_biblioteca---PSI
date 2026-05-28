@@ -1,6 +1,5 @@
 from flask import Flask, render_template, url_for, redirect, request, session, flash
 from .db import criar_conexao, inicializar_banco
-import json
 
 app = Flask(__name__)
 app.secret_key = 'segredo'
@@ -19,19 +18,23 @@ def listar_livros():
     #por enquanto tá funcionando só p admin, ai qunado tiver o p gnt normal, tem q colocar um condicional aq 
     if 'usuario' not in session:
         return redirect(url_for('login'))
-
-    with open('livros.json', 'r', encoding='utf-8') as f:
-        livros = json.load(f)
+    
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
 
     # o bixo d string de consulta q ele pediu
-    titulo = request.args.get('titulo')
-    genero = request.args.get('genero')
+    titulo = request.args.get('titulo','')
+    genero = request.args.get('genero','')
 
-    if titulo:
-        livros = [l for l in livros if titulo.lower() in l['titulo'].lower()]
+    resultado2 = cursor.execute("""
+    SELECT * FROM livros 
+    WHERE titulo LIKE ? AND  genero LIKE ?                           
+                                """,
+    (f'%{titulo}%',f'%{genero}%'))
 
-    if genero:
-        livros = [l for l in livros if genero.lower() in l['genero'].lower()]
+    livros = resultado2.fetchall()
+
+    conexao.close()
 
     return render_template('livros.html', livros=livros)
 
@@ -42,7 +45,7 @@ def cadastro_livros():
         return redirect(url_for('login'))
     
     if session.get('tipo') != 'admin':
-        flash('Apenas administradores podem cadastrar livros')
+        flash('Apenas administradores podem cadastrar livros','erro')
         return redirect(url_for('listar_livros'))
 
     if request.method == 'POST':
@@ -51,31 +54,34 @@ def cadastro_livros():
         ano = request.form['ano']
         genero = request.form['genero']
 
-        # lê o arquivo json
-        with open('livros.json', 'r', encoding='utf-8') as f:
-            livros = json.load(f)
+        conexao = criar_conexao()
+        cursor = conexao.cursor()
 
         #só pra n poder cadastrar o msm livro duas vezes
         #funciona se estiver escrito igual (n é sensível a letras maiúsculas, ent se a diferença for essa tb n vai deixar cadastrar)
-        for livro in livros:
-            if livro['titulo'].lower() == titulo.lower() and livro['autor'].lower() == autor.lower():
-                flash('Livro já cadastrado')
-                return redirect(url_for('cadastro_livros'))
+        resultado = cursor.execute("""
+        SELECT * FROM livros 
+        WHERE titulo = ? AND autor = ?
+        """ , (titulo,autor))
 
-        livros.append({
-            'titulo': titulo,
-            'autor': autor,
-            'ano': ano,
-            'genero': genero
-        })
+        livro = resultado.fetchone()
 
-        # salva no arquivo json
-        with open('livros.json', 'w', encoding='utf-8') as f:
-            json.dump(livros, f, indent=4, ensure_ascii=False)
+        if livro:
+            flash('Livro já cadastrado', 'erro')
+
+        else:
+            cursor.execute("""
+                INSERT INTO livros(titulo, autor, ano, genero)
+                VALUES(?, ?, ?, ?)
+            """, (titulo, autor, ano, genero))
+
+            conexao.commit()
+
+        conexao.close()
 
         return redirect(url_for('listar_livros'))
-
     return render_template('cadastro_livro.html')
+
 
 @app.route('/excluir_livro/<int:id>')
 def excluir (id):
@@ -83,19 +89,19 @@ def excluir (id):
         return redirect(url_for('login'))
     
     if session.get('tipo') != 'admin':
-        flash('Apenas administradores podem remover livros')
+        flash('Apenas administradores podem remover livros','erro')
         return redirect(url_for('listar_livros'))
     
-    # lê o arquivo json
-    with open('livros.json', 'r', encoding='utf-8') as f:
-            livros = json.load(f)
+    conexao = criar_conexao()
+    cursor = conexao.cursor()
 
-    #exclui pelo índice
-    if 0 <= id < len(livros):
-        livros.pop(id)
+    cursor.execute("""
+        DELETE FROM livros
+        WHERE id = ?
+    """, (id,))
 
-    with open('livros.json', 'w', encoding='utf-8') as f:
-        json.dump(livros, f, indent=4, ensure_ascii=False)
+    conexao.commit()
+    conexao.close()
 
     return redirect(url_for('listar_livros'))   
 
@@ -106,7 +112,7 @@ def editar(id):
         return redirect(url_for('login'))
     
     if session.get('tipo') != 'admin':
-        flash('Apenas administradores podem editar livros')
+        flash('Apenas administradores podem editar livros','erro')
         return redirect(url_for('listar_livros'))
 
     with open('livros.json', 'r', encoding='utf-8') as f:
@@ -126,7 +132,7 @@ def editar(id):
 @app.route('/cadastro', methods = ['POST', 'GET'])
 def cadastro():
     if 'usuario' in session:
-        flash('Usuario Cadastrado')
+        flash('Usuario Cadastrado','show')
         return redirect(url_for('perfil'))
 
     if request.method == 'POST':
@@ -152,7 +158,7 @@ def cadastro():
 
             return(redirect(url_for("login")))
         else:
-            flash('Usuário já existe')
+            flash('Usuário já existe','erro')
             return(redirect(url_for("cadastro")))
         
     return render_template('cadastro.html')
@@ -160,7 +166,7 @@ def cadastro():
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if 'usuario' in session:  
-        flash('Usuario já está logado!')  
+        flash('Usuario já está logado!','erro')  
         return redirect(url_for('perfil'))
     
     if request.method == 'POST':
@@ -179,7 +185,7 @@ def login():
             session['tipo'] = user['tipo']
             return redirect(url_for('listar_livros'))
         else:
-            flash('usuário ou senha inválidos')
+            flash('usuário ou senha inválidos','erro')
             return redirect(url_for('login'))           
     
     return render_template('login.html')
@@ -203,7 +209,7 @@ def perfil():
 
 @app.route('/logout')
 def logout():
-    session.pop('usuario', None)
+    session.clear()
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
