@@ -111,21 +111,27 @@ def editar(id):
     if 'usuario' not in session:
         return redirect(url_for('login'))
     
+        
     if session.get('tipo') != 'admin':
         flash('Apenas administradores podem editar livros','erro')
         return redirect(url_for('listar_livros'))
 
-    with open('livros.json', 'r', encoding='utf-8') as f:
-        livros = json.load(f)
+    if request.method == 'POST':
+        titulo_novo = request.form.get('titulo')
+        autor_novo = request.form.get('autor')
+        ano_novo = request.form.get('ano')
+        genero_novo = request.form.get('genero')
 
-    if 0 <= id < len(livros):
-        livros[id]['titulo'] = request.form['titulo']
-        livros[id]['autor'] = request.form['autor']
-        livros[id]['ano'] = request.form['ano']
-        livros[id]['genero'] = request.form['genero']
+        conexao = criar_conexao()
+        cursor = conexao.cursor()
 
-    with open('livros.json', 'w', encoding='utf-8') as f:
-        json.dump(livros, f, indent=4, ensure_ascii=False)
+        resultado = cursor.execute("UPDATE livros SET titulo = ?, autor = ?, ano = ?, genero = ? WHERE id = ?", (titulo_novo, autor_novo,ano_novo,genero_novo,id ))
+
+        #usuario = resultado.fetchone()
+        conexao.commit()
+        conexao.close()
+
+
 
     return redirect(url_for('listar_livros')) 
 

@@ -17,7 +17,7 @@
         <ul>
             {% for livro in livros %}
                 <li>
-                    <form method="POST" action="{{ url_for('editar', id=loop.index0) }}">
+                    <form method="POST" action="{{ url_for('editar', id=livro.id) }}">
 
                         <input type="text" name="titulo" value="{{ livro.titulo }}">
                         <input type="text" name="autor" value="{{ livro.autor }}">
