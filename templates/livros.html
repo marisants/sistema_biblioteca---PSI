@@ -17,23 +17,38 @@
         <ul>
             {% for livro in livros %}
                 <li>
-                    <form method="POST" action="{{ url_for('editar', id=livro.id) }}">
+                    {% if session.get('tipo') == 'admin' %}
+                    
+                        <form method="POST" action="{{ url_for('editar', id=livro.id) }}">
 
-                        <input type="text" name="titulo" value="{{ livro.titulo }}">
-                        <input type="text" name="autor" value="{{ livro.autor }}">
-                        <input type="number" name="ano" value="{{ livro.ano }}">
-                        <input type="text" name="genero" value="{{ livro.genero }}">
+                            <input type="text" name="titulo" value="{{ livro.titulo }}">
+                            <input type="text" name="autor" value="{{ livro.autor }}">
+                            <input type="number" name="ano" value="{{ livro.ano }}">
+                            <input type="text" name="genero" value="{{ livro.genero }}">
 
-                        <button type="submit">Salvar</button>
-                    </form>
-                    <a href="{{ url_for('excluir', id=livro.id) }}">
-                        <button id="del">Remover</button>
-                    </a>
+                            <button type="submit">Salvar</button>
+                        </form>
+                        <a href="{{ url_for('excluir', id=livro.id) }}">
+                            <button id="del">Remover</button>
+                        </a>
+                    {%else%}
+                        <div class="livro-info">
+                            <h4>{{livro.titulo}}</h4>
+                            <p>{{livro.autor}}</p>
+                            <p>{{livro.ano}}</p>
+                            <p>{{livro.genero}}</p>
+                        </div>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
     </div>
-    <a href="{{ url_for('cadastro_livros') }}" class="a">Cadastrar novo livro</a>
+    {% if session.get('tipo') == 'admin' %}
+        <form action="{{url_for('cadastro_livros')}}">
+            <button class="cadastrar">cadastrar novo livro</button>
+        </form>
+    {% endif %}
+    
 </div>
 {% endblock %}
 
@@ -55,6 +70,13 @@ form{
     width: 100%;
     display: flex;
     flex-direction: column;
+}
+.livro-info p{
+    margin: 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
 }
 h3, h2{
     width: 100%;
@@ -81,6 +103,11 @@ li{
 }
 button{
     width: 50%;
+    font-size: 15px;
+}
+.cadastrar{
+    margin-top: 10px;
+    width: 25%;
     font-size: 15px;
 }
 #del{
