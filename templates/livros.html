@@ -14,6 +14,11 @@
     
     <div class="livros">
         <h3>Livros disponiveis</h3>
+        {% if session.get('tipo') == 'admin' %}
+            <form action="{{url_for('cadastro_livros')}}">
+                <button class="cadastrar">Cadastrar novo livro</button>
+            </form>
+        {% endif %}
         <ul>
             {% for livro in livros %}
                 <li>
@@ -43,12 +48,6 @@
             {% endfor %}
         </ul>
     </div>
-    {% if session.get('tipo') == 'admin' %}
-        <form action="{{url_for('cadastro_livros')}}">
-            <button class="cadastrar">cadastrar novo livro</button>
-        </form>
-    {% endif %}
-    
 </div>
 {% endblock %}
 
@@ -106,7 +105,7 @@ button{
     font-size: 15px;
 }
 .cadastrar{
-    margin-top: 10px;
+    margin-bottom: 15px;
     width: 25%;
     font-size: 15px;
 }

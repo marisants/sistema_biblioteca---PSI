@@ -8,7 +8,6 @@ cod_admin = '2024.1'
 
 inicializar_banco()
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -82,7 +81,6 @@ def cadastro_livros():
         return redirect(url_for('listar_livros'))
     return render_template('cadastro_livro.html')
 
-
 @app.route('/excluir_livro/<int:id>')
 def excluir (id):
     if 'usuario' not in session:
@@ -131,14 +129,12 @@ def editar(id):
         conexao.commit()
         conexao.close()
 
-
-
     return redirect(url_for('listar_livros')) 
 
 @app.route('/cadastro', methods = ['POST', 'GET'])
 def cadastro():
     if 'usuario' in session:
-        flash('Usuario Cadastrado','show')
+        flash('Usuario Cadastrado!','show')
         return redirect(url_for('perfil'))
 
     if request.method == 'POST':
@@ -164,7 +160,7 @@ def cadastro():
 
             return(redirect(url_for("login")))
         else:
-            flash('Usuário já existe','erro')
+            flash('Usuário já existe!','erro')
             return(redirect(url_for("cadastro")))
         
     return render_template('cadastro.html')
@@ -191,7 +187,7 @@ def login():
             session['tipo'] = user['tipo']
             return redirect(url_for('listar_livros'))
         else:
-            flash('usuário ou senha inválidos','erro')
+            flash('Usuário ou senha inválidos!','erro')
             return redirect(url_for('login'))           
     
     return render_template('login.html')
@@ -217,6 +213,10 @@ def perfil():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@app.errorhandler(404)
+def erro404(error):
+    return render_template('erro/404.html')
 
 if __name__ == '__main__':
        app.run(debug=True)

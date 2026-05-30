@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block cont %}
+<div class="corpo">
+    <img src="{{url_for('static', filename = 'img/imagem-erro.png')}}" alt="" height="350px" width="400px">
+    <div class="texto">
+        <h1>404</h1>
+        <h2>Pagina não encontrada!</h2>
+        <p>Parece que essa pagina saiu para explorar novas historias <br> e ainda não voltou.</p>
+        <a class="a" href="{{url_for('index')}}">Voltar para o inicio</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block estilo %}
+<style>
+    .corpo{
+        gap: 25px;
+    }
+    .texto{
+        gap: 0px;
+    }
+    .a{
+        padding: 10px;
+        border: none;
+        border-radius: 9px;
+        background-color: rgb(105, 169, 228);
+        color: white;
+        box-shadow: 2px 5px 6px gray;
+    }
+</style>
+{% endblock %}

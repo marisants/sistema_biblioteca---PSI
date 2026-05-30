@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca Virtual</title>
+    <title>Biblioteca Online</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo_icon.png') }}" type="image/x-icon">
     
     <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}">
@@ -15,13 +15,14 @@
     <header>
         <div class="ini">
             <!-- tem q carregar a imagem assim, q ai n dá problema no caminho dps -->
-            <a href="{{url_for('index')}}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" height="105" width="190"></a>
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" height="105" width="190">
             <div class="nav">
                 <nav>
                     <a href="{{url_for('index')}}">Início</a>
-                    <a href="{{ url_for('listar_livros') }}">Livros</a>
+                    <a href="{{ url_for('listar_livros') }}">livros</a>
                     <a href="{{ url_for('login') }}">Login</a>
                     <a href="{{ url_for('perfil') }}">Perfil</a>
+                    <a href="#"></a>
                 </nav>
             </div>
             <input id="pesquisar" type="text" placeholder="Pesquisar">
@@ -44,7 +45,7 @@
         {% endblock %}
     </div>
     <footer>
-        <p>© 2026 BibliotecaVirtual. Todos os direitos reservados.</p>
+        <p>© 2026 BibliotecaOnline. Todos os direitos reservados.</p>
     </footer>
 </body>
 </html>
