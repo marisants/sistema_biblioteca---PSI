@@ -46,7 +46,7 @@ O desenvolvimento de um sistema web para biblioteca torna o gerenciamento mais e
 * HTML
 * CSS
 * Jinja2 (templates)
-* JSON
+* sqlite(banco de dados)
 
 ## Conclusão
 
